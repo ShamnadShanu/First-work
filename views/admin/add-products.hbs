@@ -1,0 +1,17 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2 class="mt-5">Add Product</h2>
+                <form action="/admin/add-products" method="POST" enctype="multipart/form-data">
+                    <input type="text" name="productName" class="form-control mb-4 mt-4" placeholder="Product Name">
+                    <input type="text" name="category" class="form-control mb-4" placeholder="Category">
+                    <input type="number" name="price" class="form-control mb-4" placeholder="Price">
+                    <input type="text" name="description" class="form-control mb-4" placeholder="Description">
+                    <input type="file" name="image" class="form-control">
+                    <button type="submit" class="btn btn-success mt-4">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

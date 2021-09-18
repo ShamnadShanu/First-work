@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-md-7 m-auto">
+        <div class="container mt-5 ps-5">
+            <h2 class="text-center">Create new user</h2>
+            <form action="/admin/createuser" method="POST">
+                <div class="form-group mb-3">
+                    <label for="email">Name</label>
+                    <input class="form-control" name="username" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+                </div>
+                <p class="exist" style="color: red;">
+                    {{#if exist}}
+                    {{exist}}
+                    {{/if}}
+                </p>
+                <button type="submit" class="btn btn-danger float-right">Create User</button>
+            </form>
+        </div>
+    </div>

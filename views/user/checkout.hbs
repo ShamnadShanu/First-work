@@ -1,0 +1,141 @@
+<section>
+  <div class="container">
+    <div class="row">
+      <form id="checkout-form'">
+        <div style="display: flex; flex-wrap: wrap;">
+          <div class="col-md-6 mt-4">
+            <h2 style="margin: 0;" class="mt-4">Billing Details</h2>
+            <input
+              type="text"
+              name="fname"
+              class="form-control mb-4 mt-4"
+              placeholder="FirstName"
+            />
+            <input
+              type="text"
+              name="lname"
+              class="form-control mb-4"
+              placeholder="LastName"
+            />
+            <input
+              type="text"
+              name="pin"
+              class="form-control mb-4"
+              placeholder="Pin Code"
+            />
+            <input
+              type="text"
+              name="address"
+              class="form-control mb-4"
+              placeholder="Address"
+            />
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone"
+              class="form-control"
+            />
+          </div>
+          <div class="mx-4 col-md-5" style="margin-top: 62px;">
+            <div class="card mt-5" style="height: 18rem; width:100%;">
+              <div class="card-body">
+                <div style="display: flex; justify-content: space-between;">
+                  <h6>Redmi note 8 pro</h6>
+                  <p>4</p>
+                  <p>9000</p>
+
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <h6>Redmi note 8 pro</h6>
+                  <p>4</p>
+                  <p>9000</p>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <h6>Redmi note 8 pro</h6>
+                  <p>4</p>
+                  <p>9000</p>
+                </div>
+              </div>
+              <div
+                class="mx-4 row"
+                style="display: flex; flex-direction: column;"
+              >
+                <ul style="list-style-type:none;">
+                  <li>
+                    <input type="radio" value="COD" name="payment-method" checked />
+                    COD
+                  </li>
+                  {{!-- <li>
+                    <input type="radio" value="RazerPay" name="payment-method" />RazerPay
+                  </li>
+                  <li>
+                    <input type="radio" value="Paypal" name="payment-method" />Paypal
+                  </li> --}}
+                </ul>
+              </div>
+              <div
+                class="m-3"
+                style="display: flex; justify-content: space-between;"
+              >
+                <h5>Total</h5>
+                <h5>80000</h5>
+              </div>
+        <button type="submit" class="btn btn-primary">Place Order</button>
+
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</section>
+<script>
+      $(document).ready(()=>{
+    $('#checkout-form').validate({
+      rules:{
+        fname:{
+          required:true
+        },
+        lname:{
+          required:true
+        },
+        pin:{
+          required:true,
+        },
+        address:{
+required:true
+        },
+        phone:{
+          required:true,
+          minlength: 10,
+           maxlength: 10
+        }
+      },
+      messages: {
+        email:{
+          required:'please enter your email',
+          email:'enter a valid email'
+        }
+      },
+    submitHandler: function(form,e) {
+console.l
+        e.preventDefault()
+        let total=document.getElementById('total').innerHTML
+        $.ajax({
+            url:'/place-order',
+            method:'post',
+            data:$('#checkout-form').serialize(),
+            success:(response)=>{
+              console.log(response)
+                alert(response)
+           if(response.codSuccess){       
+location.href='/order-success'
+            }
+            }
+        })
+    }
+
+    })
+  })
+</script>

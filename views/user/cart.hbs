@@ -1,0 +1,119 @@
+<section>
+  <div class="container mt-5">
+
+    <table class="table table-light " id="usersTable">
+      <thead>
+        <tr>
+          <th scope="col">No.</th>
+          <th scope="col">Item</th>
+          <th scope="col">Category</th>
+          <th scope="col">Quatity</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each items}}
+          <tr>
+            <td scope="row">{{math @index "+" 1}}</td>
+            <td>{{this.products.productName}}</td>
+            <td>{{this.products.category}}</td>
+            <p id="{{this.products._id}}price" style="visibility: hidden;">{{this.products.price}}</p>
+            <td>
+              <button onclick="change('{{this._id}}','{{this.products._id}}','{{../User._id}}',-1)" class="btn btn-danger"> < </button>
+            <span id="{{this.products._id}}">{{this.quantity}}</span>  
+              <button onclick="change('{{this._id}}','{{this.products._id}}','{{../User._id}}',1)" class="btn btn-success"> > </button>
+            </td>
+<td id="{{this.products._id}}subtotal">{{this.sub}}</td>
+            <td>
+              <p onclick="remove('{{this._id}}','{{this.products._id}}')" class="btn btn-danger">Remove</p>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div style="display: flex; flex-direction:column; background-color: rgb(250, 246, 246); height: 100px;width:auto" class="float-end mt-2 mb-3 p-3">
+      <h5 >Total: <span id="total">{{total}}</span></h5>
+      <div class="mx-2">
+        <a
+          href="/checkout"
+          class="btn btn-success ml-auto"
+        >Proceed To Checkout</a>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function change(cartId,proId,userId,count){
+  let  quantity=parseInt(document.getElementById(proId).innerHTML)
+  let price=document.getElementById(proId+'price').innerHTML
+  let total=document.getElementById('total').innerHTML
+  console.log(quantity)
+  console.log(count)
+  if(quantity==1&&count==-1){
+    let choice= confirm("Do You want to delete it");
+    if(choice){
+      count=parseInt(count)
+     $.ajax({
+         url:'/remove',
+         data:{
+        cartId,
+        proId
+         },
+         method:'post',
+         success:()=>{
+         location.reload()
+         }
+     })
+    }
+  }
+ else{
+    count=parseInt(count)
+   $.ajax({
+       url:'/change',
+      method:'post',
+       data:{
+           user:userId,
+           cart:cartId,
+           product:proId,
+           count:count,
+           quantity:quantity
+       },
+       success:(response)=>{
+           document.getElementById(proId).innerHTML=quantity+count
+           let finalCount=document.getElementById(proId).innerHTML
+          let finalSubTotal=price*finalCount
+          document.getElementById(proId+'subtotal').innerHTML=finalSubTotal
+          if(count=="-1"){
+             document.getElementById('total').innerHTML=parseInt(total)-parseInt(price)
+          }else{
+            document.getElementById('total').innerHTML=parseInt(total)+parseInt(price)
+
+          }
+
+          // document.getElementById('total1').innerHTML=response.total
+      
+       }
+   })
+  }
+  
+}
+  function remove(cartId,proId){
+   let choice= confirm("Do You want to delete it");
+   if(choice){
+$.ajax({
+      url:'/remove',
+      data:{
+        cartId,
+        proId
+      },
+      method:'post',
+      success:()=>{
+       location.reload()
+      }
+    })
+   }
+ 
+  }
+
+</script>
