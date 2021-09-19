@@ -20,21 +20,21 @@
                     <th scope="col">Category</th>
                     <th scope="col">Discription</th>
                     <th scope="col">Price</th>
-                    <th></th>
+                    {{!-- <th></th> --}}
                 </tr>
             </thead>
             <tbody>
                 {{#each Products}}
                 <tr>
-                    <th scope="row"></th>
+                    <th scope="row">{{math @index "+" 1}}</th>
                     <td>{{this.productName}}</td>
                     <td>{{this.category}}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.price}}</td>
-                    <td>
+                    {{!-- <td>
                         <a href="/admin/edit-user/{{this._id}}" class="btn btn-primary">Edit</a>
                         <a href="/admin/delete-user/{{this._id}}" onclick="return confirm('Are you sure to delete {{this.username}} information?')" class="btn btn-danger">Delete</a>
-                    </td>
+                    </td> --}}
                 </tr>
                 {{/each}}
             </tbody>

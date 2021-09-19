@@ -1,7 +1,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <form id="checkout-form'">
+      <form id="checkout-form">
         <div style="display: flex; flex-wrap: wrap;">
           <div class="col-md-6 mt-4">
             <h2 style="margin: 0;" class="mt-4">Billing Details</h2>
@@ -23,6 +23,8 @@
               class="form-control mb-4"
               placeholder="Pin Code"
             />
+              <input name="total" style="visibility: hidden;" value="{{total}}">
+
             <input
               type="text"
               name="address"
@@ -30,7 +32,7 @@
               placeholder="Address"
             />
             <input
-              type="text"
+              type="number"
               name="phone"
               placeholder="Phone"
               class="form-control"
@@ -39,22 +41,14 @@
           <div class="mx-4 col-md-5" style="margin-top: 62px;">
             <div class="card mt-5" style="height: 18rem; width:100%;">
               <div class="card-body">
+                {{#each items}}
                 <div style="display: flex; justify-content: space-between;">
-                  <h6>Redmi note 8 pro</h6>
-                  <p>4</p>
-                  <p>9000</p>
-
+            <td>{{this.products.productName}}</td>
+                  <h6></h6>
+                  <p>{{this.quantity}}</p>
+                  <p>{{this.sub}}</p>
                 </div>
-                <div style="display: flex; justify-content: space-between;">
-                  <h6>Redmi note 8 pro</h6>
-                  <p>4</p>
-                  <p>9000</p>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                  <h6>Redmi note 8 pro</h6>
-                  <p>4</p>
-                  <p>9000</p>
-                </div>
+                {{/each}}
               </div>
               <div
                 class="mx-4 row"
@@ -78,7 +72,7 @@
                 style="display: flex; justify-content: space-between;"
               >
                 <h5>Total</h5>
-                <h5>80000</h5>
+                <h5>{{total}}</h5>
               </div>
         <button type="submit" class="btn btn-primary">Place Order</button>
 
@@ -119,9 +113,7 @@ required:true
         }
       },
     submitHandler: function(form,e) {
-console.l
         e.preventDefault()
-        let total=document.getElementById('total').innerHTML
         $.ajax({
             url:'/place-order',
             method:'post',

@@ -204,5 +204,10 @@ router.post('/createuser',(req,res)=>{
   //   }
   
   // })
-
+router.get('/all_orders',verifyadminLogin,(req,res)=>{
+  userHelper.getAllOrders().then((response)=>{
+    console.log(response);
+    res.render('admin/all-orders',{admin:true,orders:response})
+  })
+})
 module.exports = router;

@@ -2,6 +2,8 @@ var db = require("../config/connection");
 var collection = require("../config/collections");
 var objectId = require("mongodb").ObjectID;
 const bcrypt = require("bcrypt");
+let moment=require('moment')
+
 
 module.exports = {
   doSignup: (userData) => {
@@ -278,5 +280,45 @@ getCartTotal:(user,product)=>{
             })
     }
   
+},
+getCartProductList:(user)=>{
+  return new Promise(async(resolve,reject)=>{
+      let cart=await db.get().collection(collection.CART).findOne({user:objectId(user)})
+      if(cart.products){
+          resolve(cart.products)
+
+      }
+  })
+},
+placeOrder:(order,products,total)=>{
+  return new Promise((resolve,reject)=>{
+  console.log(order,products,total);
+  let status=order['payment-method']==='COD'?'Placed':'Pending'
+  let orderObj={
+      deliveryDetails:{
+          userName:order.fname+" "+order.lname,
+          mobile:order.phone,
+          address:order.address,
+          pincode:order.pin
+              },
+      userId:objectId(order.user),
+      paymentMethod:order['payment-method'],
+      products:products,  
+      totalAmount:total,
+      status:status,
+      date:moment(new Date()).format('L')
+  }
+  db.get().collection(collection.ORDER_COLLECTIONS).insertOne(orderObj).then((response)=>{
+      db.get().collection(collection.CART).removeOne({user:objectId(order.user)}).then(()=>{
+        resolve(response.ops[0]._id)
+      })
+  })
+  })
+  },
+  getAllOrders:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let orders=await db.get().collection(collection.ORDER_COLLECTIONS).find().toArray()
+        resolve(orders)
+    })
 },
 };

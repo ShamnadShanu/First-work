@@ -85,10 +85,13 @@ router.post('/signup',(req,res)=>{
 
 router.get('/cart',verifyLogin,(req,res)=>{
   userHelpers.getCart(req.session.user._id).then((response)=>{
-    console.log(response);
-    userHelpers.getCartTotal(req.session.user._id,response).then((total)=>{
-      res.render('user/cart',{user:true,items:response,User: req.session.user,total:total })
-    })
+    if(response[0]){
+      userHelpers.getCartTotal(req.session.user._id,response).then((total)=>{
+        res.render('user/cart',{user:true,items:response,User: req.session.user,total:total })
+      })
+    }else{
+      res.render('user/emCart',{user:true})
+    }
   })
 })
 router.get('/addtocart/:id',verifyLogin, (req, res) => {
@@ -106,15 +109,45 @@ router.post('/change', verifyLogin, (req, res, next) => {
     res.json(response)
   })
 });
-router.post('/remove',(req, res) => {
+router.post('/remove',verifyLogin,(req, res) => {
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate,must-stale=0,post-check=0,pre-check=0')
   userHelpers.removecart(req.body).then(() => {
     console.log("mmm");
     res.json(true)
   })
 });
-router.get('/checkout',(req,res)=>{
-res.render('user/checkout')
+router.get('/checkout',verifyLogin,(req,res)=>{
+  userHelpers.getCart(req.session.user._id).then((response)=>{
+    console.log(response);
+    userHelpers.getCartTotal(req.session.user._id,response).then((total)=>{
+      res.render('user/checkout',{user:true,items:response,User: req.session.user,total:total })
+    })
+  })
 })
+router.post('/place-order', async (req, res) => {
+  let products = await userHelpers.getCartProductList(req.session.user._id)
+    // await producthelpers.changeCouponstatus(req.body.whichCoupon,req.body.code)
+    console.log(req.body['payment-method']);
+    if (req.body['payment-method'] == 'COD') {
+      req.body.user=req.session.user._id
+      userHelpers.placeOrder(req.body, products, req.body.total).then(()=>{
+        res.json({ codSuccess: true })
+      })
+    } 
+    // else if (req.body['payment-method'] == 'paypal') {
+    //   var total=req.body.total
+    //   let orderId=await userHelpers.placeOrder(req.body, products, req.body.total)
+    //   res.json({ paypal: true, total,orderId })
+    // } else {
+    //   let orderId=await userHelpers.placeOrder(req.body, products, req.body.total)
+    //   userHelpers.generateRazorpay(orderId, req.body.total).then((response) => {
+    //     res.json(response)
+    //   })
+    // }
+});
+router.get('/order-success',(req,res)=>{
+res.render('user/order_success',{user:true})
+})
+
 
 module.exports = router;

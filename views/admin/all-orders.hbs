@@ -1,0 +1,44 @@
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+
+<section>
+    <div class='container'>
+        <table class="table table-light" id="usersTable">
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Payment Method</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    <th scope="row">{{math @index "+" 1}}</th>
+                    <td>{{this.date}}</td>
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.totalAmount}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td>{{this.status}}</td>
+                    {{!-- <td>
+                        <a href="/admin/edit-user/{{this._id}}" class="btn btn-primary">Edit</a>
+                        <a href="/admin/delete-user/{{this._id}}" onclick="return confirm('Are you sure to delete {{this.username}} information?')" class="btn btn-danger">Delete</a>
+                    </td> --}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+<script>
+    $(document).ready( function () {
+    $('#usersTable').DataTable();
+} );
+</script>
