@@ -35,7 +35,7 @@ module.exports={
         let response={}
     
         return new Promise((resolve,reject)=>{
-            let adminDefined={email:'shamnadshanubinhamza005@gmail.com',password:'1234'}
+            let adminDefined={email:'admin@gmail.com',password:'1234'}
             if(adminData.email==adminDefined.email&&adminData.password==adminDefined.password){
                 response.admin=adminDefined
                 response.status=true
